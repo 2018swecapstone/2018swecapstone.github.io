@@ -13,6 +13,10 @@
       "description": "Observed events"
     },
     {
+      "name": "compliance",
+      "description": "Compliance reports"
+    },
+    {
       "name": "hospitals",
       "description": "Hospital management"
     },
@@ -258,6 +262,98 @@
           {
             "h2ms_auth": [
               "administrator"
+            ]
+          }
+        ]
+      }
+    },
+    "/hospital/{id}/compliance": {
+      "get": {
+        "tags": [
+          "hospitals",
+          "compliance"
+        ],
+        "summary": "Show a hospital's compliance report",
+        "operationId": "showHospitalCompliance",
+        "description": "Returns details about a hospital's compliance",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "Hospital id to show",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ComplianceReport"
+            }
+          },
+          "403": {
+            "description": "Access denied"
+          }
+        },
+        "security": [
+          {
+            "h2ms_auth": [
+              "viewer"
+            ]
+          }
+        ]
+      }
+    },
+    "/hospital/{hospital_id}/ward/{id}/compliance": {
+      "get": {
+        "tags": [
+          "compliance",
+          "wards"
+        ],
+        "summary": "Show a hospital ward's compliance report",
+        "operationId": "showHospitalWardCompliance",
+        "description": "Returns details about a hospital ward's compliance",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "hospital_id",
+            "description": "Hospital id to show",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "description": "Ward id to show",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ComplianceReport"
+            }
+          },
+          "403": {
+            "description": "Access denied"
+          }
+        },
+        "security": [
+          {
+            "h2ms_auth": [
+              "viewer"
             ]
           }
         ]
@@ -742,6 +838,48 @@
           {
             "h2ms_auth": [
               "administrator"
+            ]
+          }
+        ]
+      }
+    },
+    "/user/{id}/compliance": {
+      "get": {
+        "tags": [
+          "users",
+          "compliance"
+        ],
+        "summary": "Show a user's compliance report",
+        "operationId": "showUserCompliance",
+        "description": "Returns details about a user's compliance",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "User id to show",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ComplianceReport"
+            }
+          },
+          "403": {
+            "description": "Access denied"
+          }
+        },
+        "security": [
+          {
+            "h2ms_auth": [
+              "viewer"
             ]
           }
         ]
@@ -1660,6 +1798,27 @@
     }
   },
   "definitions": {
+    "ComplianceReport": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Boston's Children Hospital"
+        },
+        "opportunities": {
+          "type": "integer",
+          "description": "Hand washing opportunities"
+        },
+        "events": {
+          "type": "integer",
+          "description": "Hand washing events taken"
+        },
+        "compliance": {
+          "type": "integer",
+          "description": "Compliance percentage"
+        }
+      }
+    },
     "Hospital": {
       "type": "object",
       "required": [
