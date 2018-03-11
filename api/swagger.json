@@ -7,1780 +7,9 @@
   },
   "host": "localhost:8081",
   "basePath": "/api",
-  "tags": [
-    {
-      "name": "events",
-      "description": "Observed events"
-    },
-    {
-      "name": "compliance",
-      "description": "Compliance reports"
-    },
-    {
-      "name": "hospitals",
-      "description": "Hospital management"
-    },
-    {
-      "name": "wards",
-      "description": "Ward management"
-    },
-    {
-      "name": "users",
-      "description": "Users of the application"
-    },
-    {
-      "name": "user_types",
-      "description": "Types of users"
-    },
-    {
-      "name": "event_types",
-      "description": "Event types are things like room entry, exit, etc"
-    },
-    {
-      "name": "methods",
-      "description": "Handwashing methods"
-    }
-  ],
   "schemes": [
     "https"
   ],
-  "paths": {
-    "/hospital": {
-      "get": {
-        "tags": [
-          "hospitals"
-        ],
-        "summary": "Get a list of all hospitals",
-        "operationId": "getHospital",
-        "description": "Returns a list of all hospitals",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "$ref": "#/parameters/per_page"
-          },
-          {
-            "$ref": "#/parameters/page"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Hospital"
-              }
-            }
-          },
-          "403": {
-            "description": "Access denied"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "viewer"
-            ]
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "hospitals"
-        ],
-        "summary": "Add a new hospital",
-        "description": "Add a new hospital to the H2MS application.",
-        "operationId": "addHospital",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Hopsital object that needs to be added",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Hospital"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "schema": {
-              "$ref": "#/definitions/Hospital"
-            }
-          },
-          "400": {
-            "description": "Invalid input"
-          },
-          "403": {
-            "description": "Access denied"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "administrator"
-            ]
-          }
-        ]
-      }
-    },
-    "/hospital/{id}": {
-      "get": {
-        "tags": [
-          "hospitals"
-        ],
-        "summary": "Show a hospital",
-        "operationId": "showHospital",
-        "description": "Returns details about a hospital",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "description": "Hospital id to show",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "schema": {
-              "$ref": "#/definitions/Hospital"
-            }
-          },
-          "403": {
-            "description": "Access denied"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "viewer"
-            ]
-          }
-        ]
-      },
-      "put": {
-        "tags": [
-          "hospitals"
-        ],
-        "summary": "Update a hospital",
-        "description": "Update a hospital in the H2MS application.",
-        "operationId": "updateHospital",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "description": "Hospital id to update",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Hopsital object fields that needs to be updated",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Hospital"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "schema": {
-              "$ref": "#/definitions/Hospital"
-            }
-          },
-          "400": {
-            "description": "Invalid input"
-          },
-          "403": {
-            "description": "Access denied"
-          },
-          "404": {
-            "description": "Hospital not found"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "administrator"
-            ]
-          }
-        ]
-      },
-      "delete": {
-        "tags": [
-          "hospitals"
-        ],
-        "summary": "Deletes a hospital",
-        "description": "",
-        "operationId": "deleteHospital",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Pet id to delete",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Invalid ID supplied"
-          },
-          "404": {
-            "description": "Hospital not found"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "administrator"
-            ]
-          }
-        ]
-      }
-    },
-    "/hospital/{id}/compliance": {
-      "get": {
-        "tags": [
-          "hospitals",
-          "compliance"
-        ],
-        "summary": "Show a hospital's compliance report",
-        "operationId": "showHospitalCompliance",
-        "description": "Returns details about a hospital's compliance",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "description": "Hospital id to show",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "schema": {
-              "$ref": "#/definitions/ComplianceReport"
-            }
-          },
-          "403": {
-            "description": "Access denied"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "viewer"
-            ]
-          }
-        ]
-      }
-    },
-    "/hospital/{hospital_id}/ward/{id}/compliance": {
-      "get": {
-        "tags": [
-          "compliance",
-          "wards"
-        ],
-        "summary": "Show a hospital ward's compliance report",
-        "operationId": "showHospitalWardCompliance",
-        "description": "Returns details about a hospital ward's compliance",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "hospital_id",
-            "description": "Hospital id to show",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          },
-          {
-            "in": "path",
-            "name": "id",
-            "description": "Ward id to show",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "schema": {
-              "$ref": "#/definitions/ComplianceReport"
-            }
-          },
-          "403": {
-            "description": "Access denied"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "viewer"
-            ]
-          }
-        ]
-      }
-    },
-    "/hospital/{id}/ward": {
-      "get": {
-        "tags": [
-          "wards"
-        ],
-        "summary": "Get a list of all wards for a hospital",
-        "operationId": "getWard",
-        "description": "Returns a list of all wards for a hospital",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "$ref": "#/parameters/per_page"
-          },
-          {
-            "$ref": "#/parameters/page"
-          },
-          {
-            "in": "path",
-            "name": "id",
-            "description": "Hospital id",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Ward"
-              }
-            }
-          },
-          "403": {
-            "description": "Access denied"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "viewer"
-            ]
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "wards"
-        ],
-        "summary": "Add a new ward",
-        "description": "Add a new ward to the H2MS application.",
-        "operationId": "addWard",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "description": "Hospital id",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Hopsital object that needs to be added",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Ward"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created",
-            "schema": {
-              "$ref": "#/definitions/Ward"
-            }
-          },
-          "400": {
-            "description": "Invalid input"
-          },
-          "403": {
-            "description": "Access denied"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "administrator"
-            ]
-          }
-        ]
-      }
-    },
-    "/hospital/{hospital_id}/ward/{id}": {
-      "get": {
-        "tags": [
-          "wards"
-        ],
-        "summary": "Show a ward",
-        "operationId": "showWard",
-        "description": "Returns details about a ward",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "hospital_id",
-            "description": "Hospital ID",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          },
-          {
-            "in": "path",
-            "name": "id",
-            "description": "Ward id to show",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "schema": {
-              "$ref": "#/definitions/Ward"
-            }
-          },
-          "403": {
-            "description": "Access denied"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "viewer"
-            ]
-          }
-        ]
-      },
-      "put": {
-        "tags": [
-          "wards"
-        ],
-        "summary": "Update a ward",
-        "description": "Update a ward in the H2MS application.",
-        "operationId": "updateWard",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "hospital_id",
-            "description": "Hospital ID",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          },
-          {
-            "in": "path",
-            "name": "id",
-            "description": "Ward id to update",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Hopsital object fields that needs to be updated",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Ward"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "schema": {
-              "$ref": "#/definitions/Ward"
-            }
-          },
-          "400": {
-            "description": "Invalid input"
-          },
-          "403": {
-            "description": "Access denied"
-          },
-          "404": {
-            "description": "Ward not found"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "administrator"
-            ]
-          }
-        ]
-      },
-      "delete": {
-        "tags": [
-          "wards"
-        ],
-        "summary": "Deletes a ward",
-        "description": "",
-        "operationId": "deleteWard",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "hospital_id",
-            "description": "Hospital ID",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          },
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Pet id to delete",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Invalid ID supplied"
-          },
-          "404": {
-            "description": "Ward not found"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "administrator"
-            ]
-          }
-        ]
-      }
-    },
-    "/user": {
-      "get": {
-        "tags": [
-          "users"
-        ],
-        "summary": "Get a list of all users",
-        "operationId": "getUser",
-        "description": "Returns a list of all users",
-        "parameters": [
-          {
-            "$ref": "#/parameters/per_page"
-          },
-          {
-            "$ref": "#/parameters/page"
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/User"
-              }
-            }
-          },
-          "403": {
-            "description": "Access denied"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "administrator"
-            ]
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "users"
-        ],
-        "summary": "Add a new user",
-        "description": "Add a new user to the H2MS application.",
-        "operationId": "addUser",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Hopsital object that needs to be added",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created",
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
-          },
-          "400": {
-            "description": "Invalid input"
-          },
-          "403": {
-            "description": "Access denied"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "administrator"
-            ]
-          }
-        ]
-      }
-    },
-    "/user/{id}": {
-      "get": {
-        "tags": [
-          "users"
-        ],
-        "summary": "Show a user",
-        "operationId": "showUser",
-        "description": "Returns details about a user",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "description": "User id to show",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
-          },
-          "403": {
-            "description": "Access denied"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "administrator"
-            ]
-          }
-        ]
-      },
-      "put": {
-        "tags": [
-          "users"
-        ],
-        "summary": "Update a user",
-        "description": "Update a user in the H2MS application.",
-        "operationId": "updateUser",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "description": "User id to update",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Hopsital object fields that needs to be updated",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
-          },
-          "400": {
-            "description": "Invalid input"
-          },
-          "403": {
-            "description": "Access denied"
-          },
-          "404": {
-            "description": "User not found"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "administrator"
-            ]
-          }
-        ]
-      },
-      "delete": {
-        "tags": [
-          "users"
-        ],
-        "summary": "Deletes a user",
-        "description": "",
-        "operationId": "deleteUser",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Pet id to delete",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Invalid ID supplied"
-          },
-          "404": {
-            "description": "User not found"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "administrator"
-            ]
-          }
-        ]
-      }
-    },
-    "/user/{id}/compliance": {
-      "get": {
-        "tags": [
-          "users",
-          "compliance"
-        ],
-        "summary": "Show a user's compliance report",
-        "operationId": "showUserCompliance",
-        "description": "Returns details about a user's compliance",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "description": "User id to show",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "schema": {
-              "$ref": "#/definitions/ComplianceReport"
-            }
-          },
-          "403": {
-            "description": "Access denied"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "viewer"
-            ]
-          }
-        ]
-      }
-    },
-    "/user_type": {
-      "get": {
-        "tags": [
-          "user_types"
-        ],
-        "summary": "Get a list of all user_types",
-        "operationId": "getUserType",
-        "description": "Returns a list of all user_types",
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/UserType"
-              }
-            }
-          },
-          "403": {
-            "description": "Access denied"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "viewer"
-            ]
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "user_types"
-        ],
-        "summary": "Add a new user_type",
-        "description": "Add a new user_type to the H2MS application.",
-        "operationId": "addUserType",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Hopsital object that needs to be added",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/UserType"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created",
-            "schema": {
-              "$ref": "#/definitions/UserType"
-            }
-          },
-          "400": {
-            "description": "Invalid input"
-          },
-          "403": {
-            "description": "Access denied"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "administrator"
-            ]
-          }
-        ]
-      }
-    },
-    "/user_type/{id}": {
-      "get": {
-        "tags": [
-          "user_types"
-        ],
-        "summary": "Show a user_type",
-        "operationId": "showUserType",
-        "description": "Returns details about a user_type",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "description": "UserType id to show",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "schema": {
-              "$ref": "#/definitions/UserType"
-            }
-          },
-          "403": {
-            "description": "Access denied"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "viewer"
-            ]
-          }
-        ]
-      },
-      "put": {
-        "tags": [
-          "user_types"
-        ],
-        "summary": "Update a user_type",
-        "description": "Update a user_type in the H2MS application.",
-        "operationId": "updateUserType",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "description": "UserType id to update",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Hopsital object fields that needs to be updated",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/UserType"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "schema": {
-              "$ref": "#/definitions/UserType"
-            }
-          },
-          "400": {
-            "description": "Invalid input"
-          },
-          "403": {
-            "description": "Access denied"
-          },
-          "404": {
-            "description": "UserType not found"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "administrator"
-            ]
-          }
-        ]
-      },
-      "delete": {
-        "tags": [
-          "user_types"
-        ],
-        "summary": "Deletes a user_type",
-        "description": "",
-        "operationId": "deleteUserType",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "User type id to delete",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Invalid ID supplied"
-          },
-          "404": {
-            "description": "UserType not found"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "administrator"
-            ]
-          }
-        ]
-      }
-    },
-    "/event_type": {
-      "get": {
-        "tags": [
-          "event_types"
-        ],
-        "summary": "Get a list of all event_types",
-        "operationId": "getEventType",
-        "description": "Returns a list of all event_types",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "$ref": "#/parameters/per_page"
-          },
-          {
-            "$ref": "#/parameters/page"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/EventType"
-              }
-            }
-          },
-          "403": {
-            "description": "Access denied"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "viewer"
-            ]
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "event_types"
-        ],
-        "summary": "Add a new event_type",
-        "description": "Add a new event_type to the H2MS application.",
-        "operationId": "addEventType",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Hopsital object that needs to be added",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/EventType"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created",
-            "schema": {
-              "$ref": "#/definitions/EventType"
-            }
-          },
-          "400": {
-            "description": "Invalid input"
-          },
-          "403": {
-            "description": "Access denied"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "administrator"
-            ]
-          }
-        ]
-      }
-    },
-    "/event_type/{id}": {
-      "get": {
-        "tags": [
-          "event_types"
-        ],
-        "summary": "Show a event_type",
-        "operationId": "showEventType",
-        "description": "Returns details about a event_type",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "description": "EventType id to show",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "schema": {
-              "$ref": "#/definitions/EventType"
-            }
-          },
-          "403": {
-            "description": "Access denied"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "viewer"
-            ]
-          }
-        ]
-      },
-      "put": {
-        "tags": [
-          "event_types"
-        ],
-        "summary": "Update a event_type",
-        "description": "Update a event_type in the H2MS application.",
-        "operationId": "updateEventType",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "description": "EventType id to update",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Hopsital object fields that needs to be updated",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/EventType"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "schema": {
-              "$ref": "#/definitions/EventType"
-            }
-          },
-          "400": {
-            "description": "Invalid input"
-          },
-          "403": {
-            "description": "Access denied"
-          },
-          "404": {
-            "description": "EventType not found"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "administrator"
-            ]
-          }
-        ]
-      },
-      "delete": {
-        "tags": [
-          "event_types"
-        ],
-        "summary": "Deletes a event_type",
-        "description": "",
-        "operationId": "deleteEventType",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "User type id to delete",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Invalid ID supplied"
-          },
-          "404": {
-            "description": "EventType not found"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "administrator"
-            ]
-          }
-        ]
-      }
-    },
-    "/method": {
-      "get": {
-        "tags": [
-          "methods"
-        ],
-        "summary": "Get a list of all methods",
-        "operationId": "getMethod",
-        "description": "Returns a list of all methods",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "$ref": "#/parameters/per_page"
-          },
-          {
-            "$ref": "#/parameters/page"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Method"
-              }
-            }
-          },
-          "403": {
-            "description": "Access denied"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "viewer"
-            ]
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "methods"
-        ],
-        "summary": "Add a new method",
-        "description": "Add a new method to the H2MS application.",
-        "operationId": "addMethod",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Hopsital object that needs to be added",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Method"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created",
-            "schema": {
-              "$ref": "#/definitions/Method"
-            }
-          },
-          "400": {
-            "description": "Invalid input"
-          },
-          "403": {
-            "description": "Access denied"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "administrator"
-            ]
-          }
-        ]
-      }
-    },
-    "/method/{id}": {
-      "get": {
-        "tags": [
-          "methods"
-        ],
-        "summary": "Show a method",
-        "operationId": "showMethod",
-        "description": "Returns details about a method",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "description": "Method id to show",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "schema": {
-              "$ref": "#/definitions/Method"
-            }
-          },
-          "403": {
-            "description": "Access denied"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "viewer"
-            ]
-          }
-        ]
-      },
-      "put": {
-        "tags": [
-          "methods"
-        ],
-        "summary": "Update a method",
-        "description": "Update a method in the H2MS application.",
-        "operationId": "updateMethod",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "description": "Method id to update",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Hopsital object fields that needs to be updated",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Method"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "schema": {
-              "$ref": "#/definitions/Method"
-            }
-          },
-          "400": {
-            "description": "Invalid input"
-          },
-          "403": {
-            "description": "Access denied"
-          },
-          "404": {
-            "description": "Method not found"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "administrator"
-            ]
-          }
-        ]
-      },
-      "delete": {
-        "tags": [
-          "methods"
-        ],
-        "summary": "Deletes a method",
-        "description": "",
-        "operationId": "deleteMethod",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "User type id to delete",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Invalid ID supplied"
-          },
-          "404": {
-            "description": "Method not found"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "administrator"
-            ]
-          }
-        ]
-      }
-    },
-    "/event": {
-      "get": {
-        "tags": [
-          "events"
-        ],
-        "summary": "Get a list of all events",
-        "operationId": "getEvent",
-        "description": "Returns a list of all events",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "$ref": "#/parameters/per_page"
-          },
-          {
-            "$ref": "#/parameters/page"
-          },
-          {
-            "$ref": "#/parameters/ward_id"
-          },
-          {
-            "$ref": "#/parameters/hospital_id"
-          },
-          {
-            "$ref": "#/parameters/subject_id"
-          },
-          {
-            "$ref": "#/parameters/event_type_id"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Event"
-              }
-            }
-          },
-          "403": {
-            "description": "Access denied"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "viewer"
-            ]
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "events"
-        ],
-        "summary": "Add a new event",
-        "description": "Add a new event to the H2MS application.",
-        "operationId": "addEvent",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Hopsital object that needs to be added",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/EventByIDs"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created",
-            "schema": {
-              "$ref": "#/definitions/Event"
-            }
-          },
-          "400": {
-            "description": "Invalid input"
-          },
-          "403": {
-            "description": "Access denied"
-          },
-          "404": {
-            "description": "Not found"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "administrator"
-            ]
-          }
-        ]
-      }
-    },
-    "/event/{id}": {
-      "get": {
-        "tags": [
-          "events"
-        ],
-        "summary": "Show a event",
-        "operationId": "showEvent",
-        "description": "Returns details about a event",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "description": "Event id to show",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "schema": {
-              "$ref": "#/definitions/Event"
-            }
-          },
-          "403": {
-            "description": "Access denied"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "viewer"
-            ]
-          }
-        ]
-      },
-      "put": {
-        "tags": [
-          "events"
-        ],
-        "summary": "Update a event",
-        "description": "Update a event in the H2MS application.",
-        "operationId": "updateEvent",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "description": "Event id to update",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Hopsital object fields that needs to be updated",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/EventByIDs"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "schema": {
-              "$ref": "#/definitions/Event"
-            }
-          },
-          "400": {
-            "description": "Invalid input"
-          },
-          "403": {
-            "description": "Access denied"
-          },
-          "404": {
-            "description": "Event not found"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "administrator"
-            ]
-          }
-        ]
-      },
-      "delete": {
-        "tags": [
-          "events"
-        ],
-        "summary": "Deletes a event",
-        "description": "",
-        "operationId": "deleteEvent",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "User type id to delete",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Invalid ID supplied"
-          },
-          "404": {
-            "description": "Event not found"
-          }
-        },
-        "security": [
-          {
-            "h2ms_auth": [
-              "administrator"
-            ]
-          }
-        ]
-      }
-    }
-  },
   "securityDefinitions": {
     "h2ms_auth": {
       "type": "oauth2",
@@ -1798,35 +27,11 @@
     }
   },
   "definitions": {
-    "ComplianceReport": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "example": "Boston's Children Hospital"
-        },
-        "opportunities": {
-          "type": "integer",
-          "description": "Hand washing opportunities"
-        },
-        "events": {
-          "type": "integer",
-          "description": "Hand washing events taken"
-        },
-        "compliance": {
-          "type": "integer",
-          "description": "Compliance percentage"
-        }
-      }
-    },
-    "Hospital": {
+    "Location": {
       "type": "object",
       "required": [
         "name",
-        "address",
-        "city",
-        "state_or_province",
-        "zip"
+        "type"
       ],
       "properties": {
         "id": {
@@ -1836,6 +41,10 @@
         "name": {
           "type": "string",
           "example": "Boston Children's Hospital"
+        },
+        "type": {
+          "type": "string",
+          "example": "Hospital"
         },
         "address": {
           "type": "string",
@@ -1849,67 +58,22 @@
           "type": "string",
           "example": "MA"
         },
+        "country": {
+          "type": "string",
+          "example": "United States"
+        },
         "zip": {
           "type": "string",
           "example": "02115"
-        }
-      }
-    },
-    "Ward": {
-      "type": "object",
-      "required": [
-        "name",
-        "address",
-        "hospital"
-      ],
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
         },
-        "name": {
-          "type": "string",
-          "example": "Emergency Room"
+        "parent": {
+          "$ref": "#/definitions/Location"
         },
-        "hospital": {
-          "$ref": "#/definitions/Hospital"
-        }
-      }
-    },
-    "EventByIDs": {
-      "type": "object",
-      "required": [
-        "date-time",
-        "ward_id",
-        "subject_id",
-        "observer_id",
-        "event_type_id",
-        "method_id"
-      ],
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "date-time": {
-          "type": "string",
-          "format": "date-time",
-          "example": "2017-07-21T17:32:28Z"
-        },
-        "ward_id": {
-          "$ref": "#/definitions/Ward/properties/id"
-        },
-        "subject_id": {
-          "$ref": "#/definitions/User/properties/id"
-        },
-        "observer_id": {
-          "$ref": "#/definitions/User/properties/id"
-        },
-        "event_type_id": {
-          "$ref": "#/definitions/EventType/properties/id"
-        },
-        "method_id": {
-          "$ref": "#/definitions/Method/properties/id"
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Location"
+          }
         }
       }
     },
@@ -1918,7 +82,6 @@
       "required": [
         "date-time",
         "ward",
-        "subject",
         "observer",
         "event_type",
         "method"
@@ -1933,8 +96,8 @@
           "format": "date-time",
           "example": "2017-07-21T17:32:28Z"
         },
-        "ward": {
-          "$ref": "#/definitions/Ward"
+        "location": {
+          "$ref": "#/definitions/Location"
         },
         "subject": {
           "$ref": "#/definitions/User"
@@ -1947,6 +110,12 @@
         },
         "method": {
           "$ref": "#/definitions/Method/properties/description"
+        },
+        "washed": {
+          "type": "boolean"
+        },
+        "opportunity": {
+          "type": "boolean"
         }
       }
     },
@@ -1959,6 +128,10 @@
         "id": {
           "type": "integer",
           "format": "int64"
+        },
+        "name": {
+          "type": "string",
+          "example": "Soap and water"
         },
         "description": {
           "type": "string",
@@ -1982,13 +155,79 @@
         }
       }
     },
+    "IdTag": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "type": {
+          "type": "string",
+          "example": "RFID"
+        },
+        "user": {
+          "$ref": "#/definitions/User"
+        }
+      }
+    },
+    "Sensor": {
+      "type": "object",
+      "properties": {
+        "location": {
+          "$ref": "#/definitions/Location"
+        },
+        "user": {
+          "$ref": "#/definitions/User"
+        },
+        "length": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "descriptor_type": {
+          "type": "string"
+        },
+        "usb": {
+          "type": "string"
+        },
+        "device": {
+          "type": "string"
+        },
+        "device_class": {
+          "type": "string"
+        },
+        "device_sub_class": {
+          "type": "string"
+        },
+        "device_protocol": {
+          "type": "string"
+        },
+        "max_packet_size": {
+          "type": "integer"
+        },
+        "vendor": {
+          "type": "string"
+        },
+        "manufacturer": {
+          "type": "string"
+        },
+        "product": {
+          "type": "string"
+        },
+        "serial": {
+          "type": "string"
+        },
+        "num_configurations": {
+          "type": "integer"
+        }
+      }
+    },
     "User": {
       "type": "object",
       "required": [
         "first_name",
         "last_name",
         "email",
-        "dob",
         "type",
         "hospital"
       ],
@@ -2013,16 +252,22 @@
           "type": "string",
           "format": "email"
         },
-        "dob": {
+        "notification_frequency": {
           "type": "string",
-          "format": "date",
-          "example": "07-13-1983"
+          "example": "Weekly"
         },
         "type": {
           "$ref": "#/definitions/UserType/properties/description"
         },
-        "hospital": {
-          "$ref": "#/definitions/Hospital/properties/name"
+        "location": {
+          "$ref": "#/definitions/Location"
+        },
+        "photo": {
+          "type": "string",
+          "format": "url"
+        },
+        "is_admin": {
+          "type": "boolean"
         }
       }
     },
@@ -2033,7 +278,7 @@
           "type": "integer",
           "format": "int64"
         },
-        "description": {
+        "name": {
           "type": "string",
           "example": "Emergency Room Physician"
         }
